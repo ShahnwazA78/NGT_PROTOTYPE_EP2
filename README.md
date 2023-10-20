@@ -28,29 +28,29 @@ The sort module used from [this repository](https://github.com/abewley/sort).
 
 ## Steps to Run
 1-> Clone the [Repository](https://github.com/ShahnwazA78/NGT_PROTOTYPE_EP2.git)
-bash
+```bash
 git clone https://github.com/ShahnwazA78/NGT_PROTOTYPE_EP2.git
-
+```
 2-> Make an environment with python=3.8 using the following command
- bash
+``` bash
 conda create --prefix ./env python==3.8 -y
-
+```
 3-> Go to the protect directory NGT_PROTOTYPE_EP2 by following command
-bash
+```bash
 cd /path/to/NGT_PROTOTYPE_EP2/
-
+```
 4-> Install the project dependencies using the following command 
-bash
+```bash
 pip install -r requirements.txt
-
+```
 5-> Go to sort Directory by following command
-bash
+```bash
 cd sort
-
+```
 6-> Install the sort module dependencies using following command
-bash
+```bash
 pip install -r requirements.txt
-
+```
 7-> Provide the video in Test-Videos
 8-> Run main.py file
 9-> Run add_missing_data.py
@@ -58,3 +58,8 @@ pip install -r requirements.txt
 
 ## Result : Number plate data is stored is test.csv file locally in the folder itself.
            Also processed.mp4 an output video is produced for visualization.
+   
+
+
+
+
