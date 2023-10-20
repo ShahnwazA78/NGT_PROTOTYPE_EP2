@@ -67,7 +67,6 @@ def license_complies_format(text):
     Returns:
         bool: True if the license plate complies with the format, False otherwise.
     """
-    return True
     size=[8,9,10]
     if len(text) not in size:
         return False
@@ -117,7 +116,6 @@ def format_license(text):
     Returns:
         str: Formatted license plate text.
     """
-    return text
     formatted_text = ''
     if(len(text)==8):
         mapping = {0: dict_int_to_char, 1: dict_int_to_char, 2: dict_char_to_int, 3: dict_char_to_int, 4: dict_char_to_int,
