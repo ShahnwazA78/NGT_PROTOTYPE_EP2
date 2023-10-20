@@ -31,11 +31,11 @@ results = pd.read_csv('./test_interpolated.csv')
 video_path = 'ngt.mp4'
 cap = cv2.VideoCapture(video_path)
 
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Specify the codec
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 fps = cap.get(cv2.CAP_PROP_FPS)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-out = cv2.VideoWriter('./out.mp4', fourcc, fps, (width, height))
+out = cv2.VideoWriter('./processed-Video.mp4', fourcc, fps, (width, height))
 
 license_plate = {}
 for car_id in np.unique(results['car_id']):
@@ -112,8 +112,6 @@ for _ in tqdm(range(total_frames), desc="Processing Video"):
         out.write(frame)
         frame = cv2.resize(frame, (1280, 720))
 
-        # cv2.imshow('frame', frame)
-        # cv2.waitKey(0)
 
 out.release()
 cap.release()

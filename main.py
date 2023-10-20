@@ -6,23 +6,20 @@ from sort.sort import *
 from util import get_car, read_license_plate, write_csv
 import logging
 
-# Configure the logging to suppress other log messages
 logging.basicConfig(level=logging.ERROR)
 
 results = {}
 
 mot_tracker = Sort()
 
-# load models
 coco_model = YOLO('yolov8n.pt')
 license_plate_detector = YOLO('best.pt')
 
-# load video
-cap = cv2.VideoCapture('./ngt.mp4')
+# loading the video
+cap = cv2.VideoCapture('./Test-Videos/ngt.mp4')
 total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 vehicles = [2, 3, 5, 7]
 
-# read frames
 frame_nmr = -1
 ret = True
 for _ in tqdm(range(total_frames), desc="Processing Frames"):
@@ -30,7 +27,7 @@ for _ in tqdm(range(total_frames), desc="Processing Frames"):
     ret, frame = cap.read()
     if ret:
         results[frame_nmr] = {}
-        # detect vehicles
+        # detecting the vehicles
         detections = coco_model(frame)[0]
         detections_ = []
         for detection in detections.boxes.data.tolist():
@@ -38,28 +35,26 @@ for _ in tqdm(range(total_frames), desc="Processing Frames"):
             if int(class_id) in vehicles:
                 detections_.append([x1, y1, x2, y2, score])
 
-        # track vehicles
+        # tracking vehicles
         track_ids = mot_tracker.update(np.asarray(detections_))
        
 
-        # detect license plates
         license_plates = license_plate_detector(frame)[0]
         for license_plate in license_plates.boxes.data.tolist():
             x1, y1, x2, y2, score, class_id = license_plate
 
-            # assign license plate to car
+            # assign license plate to the car
             xcar1, ycar1, xcar2, ycar2, car_id = get_car(license_plate, track_ids)
 
             if car_id != -1:
 
-                # crop license plate
+                # stap to crop the number plate
                 license_plate_crop = frame[int(y1):int(y2), int(x1): int(x2), :]
 
-                # process license plate
                 license_plate_crop_gray = cv2.cvtColor(license_plate_crop, cv2.COLOR_BGR2GRAY)
                 _, license_plate_crop_thresh = cv2.threshold(license_plate_crop_gray, 64, 255, cv2.THRESH_BINARY_INV)
 
-                # read license plate number
+                # step to read license plate number
                 license_plate_text, license_plate_text_score = read_license_plate(license_plate_crop_thresh)
 
                 if license_plate_text is not None:
@@ -68,6 +63,5 @@ for _ in tqdm(range(total_frames), desc="Processing Frames"):
                                                                     'text': license_plate_text,
                                                                     'bbox_score': score,
                                                                     'text_score': license_plate_text_score}}
-
-# write results
+#writing results to test.csv
 write_csv(results, './test.csv')
